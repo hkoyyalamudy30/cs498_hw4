@@ -1,0 +1,9 @@
+Q1: FDB splits TMS and SS, so transaction logic and data storage are handled separately, which makes the system easier to scale and recover. TMS handles ordering, conflict checking, and commits, while SS is just responsible for storing and serving the actual data.
+
+Q2: The Resolver in the TMS is responsible for detecting read-write conflicts between transactions. This check happens during the commit phase, right before the transaction is finalized.
+
+Q3: The read version is basically a snapshot timestamp that tells the transaction what version of the database it should read from. It ensures consistency by making sure all reads see a stable, consistent state of the database.
+
+Q4: Snapshot reads don’t participate in conflict detection, so they won’t cause a transaction to abort due to conflicts. You’d use them when you want faster reads and don’t care about strict serializability for those specific reads.
+
+Q5: Recovery is cheap because LogServers continuously store mutations, and StorageServers already apply them in the background. So during recovery, the system just catches up instead of replaying a full log from scratch.
